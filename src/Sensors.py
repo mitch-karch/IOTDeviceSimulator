@@ -98,14 +98,3 @@ class GPS(Sensor):
         if not isinstance(value, float):
             raise Exception("Longitude must be a float")
         self.__longitude = value
-
-
-if __name__ == "__main__":
-    a = Latch()
-    print("Made a latch:", a)
-    a.open()
-    print("Open latch:", a)
-    a.close()
-    print("Close latch:", a)
-    a.generate_values()
-    print("Random gen val:", a)
