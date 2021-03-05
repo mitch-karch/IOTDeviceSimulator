@@ -1,5 +1,6 @@
 import unittest
 from src.Sensors import Latch, Temperature, GPS
+from datetime import datetime as dt
 
 
 class TestLatch(unittest.TestCase):
@@ -17,6 +18,11 @@ class TestLatch(unittest.TestCase):
         self.latch.close()
         self.assertEqual(self.latch.measured_value, "OFF")
 
+    def test_timestamp(self):
+        self.latch.open()
+        difference = dt.utcnow() - self.latch.timestamp
+        self.assertTrue(difference.seconds < 5)
+
 
 class TestTemperature(unittest.TestCase):
     def setUp(self):
@@ -28,6 +34,11 @@ class TestTemperature(unittest.TestCase):
     def test_check_change(self):
         self.temperature.generate_values()
         self.assertTrue(-5 <= self.temperature.measured_value <= 5)
+
+    def test_timestamp(self):
+        self.temperature.generate_values()
+        difference = dt.utcnow() - self.temperature.timestamp
+        self.assertTrue(difference.seconds < 5)
 
 
 class TestGPS(unittest.TestCase):
@@ -53,6 +64,13 @@ class TestGPS(unittest.TestCase):
 
         self.assertTrue(self.GPS.longitude == set_long)
         self.assertTrue(self.GPS.latitude == set_lat)
+
+    def test_timestamp(self):
+        self.GPS.longitude = 31.0
+        difference = dt.utcnow() - self.GPS.timestamp
+        self.assertTrue(difference.seconds < 5)
+
+
 
 if __name__ == "__main__":
     unittest.main()

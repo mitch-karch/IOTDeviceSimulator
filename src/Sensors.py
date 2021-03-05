@@ -26,23 +26,23 @@ class Sensor:
         self.measured_value = measured_val
 
     @property
-    def timestamp(self, value):
-        return self.__timestamp
+    def timestamp(self):
+        return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value=dt.utcnow()):
+    def timestamp(self, value):
         if not isinstance(value, dt):
             raise Exception("Timestamp value passed is not a datetime object")
-        self.__timestamp = value
+        self._timestamp = value
 
     @property
     def measured_value(self):
-        return self.__measured_value
+        return self._measured_value
 
     @measured_value.setter
-    def measured_value(self, value=None):
+    def measured_value(self, value):
         self.timestamp = dt.utcnow()
-        self.__measured_value = value
+        self._measured_value = value
 
     def __str__(self):
         return str(self.measured_value)
@@ -59,7 +59,7 @@ class Temperature(Sensor):
 
 class Latch(Sensor):
     def __init__(self, sensor_state=SensorState.OFF):
-        Sensor.__init__(self, sensor_state.name)
+        super().__init__(sensor_state.name)
 
     def open(self):
         self.measured_value = SensorState.ON.name
@@ -75,26 +75,28 @@ class Latch(Sensor):
 
 class GPS(Sensor):
     def __init__(self, lat=37.874772, longi=-122.258674):
-        Sensor.__init__(self)
+        super().__init__()
         self.latitude = lat
         self.longitude = longi
 
     @property
     def latitude(self):
-        return self.__latitude
+        return self._latitude
 
     @latitude.setter
     def latitude(self, value=None):
         if not isinstance(value, float):
             raise Exception("Latitude must be a float")
-        self.__latitude = value
+        self._latitude = value
+        self.measured_value = None
 
     @property
     def longitude(self):
-        return self.__longitude
+        return self._longitude
 
     @longitude.setter
     def longitude(self, value=None):
         if not isinstance(value, float):
             raise Exception("Longitude must be a float")
-        self.__longitude = value
+        self._longitude = value
+        self.measured_value = None
