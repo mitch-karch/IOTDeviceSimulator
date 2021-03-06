@@ -44,6 +44,9 @@ class Sensor:
         self.timestamp = dt.utcnow()
         self._measured_value = value
 
+    def dict_rep(self):
+        return {"measured_value": self.measured_value, "timestamp": self.timestamp}
+
     def __str__(self):
         return str(self.measured_value)
 
@@ -100,3 +103,16 @@ class GPS(Sensor):
             raise Exception("Longitude must be a float")
         self._longitude = value
         self.measured_value = None
+
+    def dict_rep(self):
+        return {
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "timestamp": self.timestamp,
+        }
+
+    def generate_values(self):
+        self.latitude += random.normalvariate(0, 0.001)
+        self.longitude += random.normalvariate(0, 0.001)
+
+

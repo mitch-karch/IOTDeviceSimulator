@@ -8,7 +8,8 @@ class TestLatch(unittest.TestCase):
         self.latch = Latch()
 
     def test_check_initial(self):
-        self.assertEqual(self.latch.measured_value, "OFF")
+        self.assertEqual(self.latch.measured_value,
+         "OFF")
 
     def test_open_latch(self):
         self.latch.open()
@@ -69,7 +70,6 @@ class TestGPS(unittest.TestCase):
         self.GPS.longitude = 31.0
         difference = dt.utcnow() - self.GPS.timestamp
         self.assertTrue(difference.seconds < 5)
-
 
 
 if __name__ == "__main__":
