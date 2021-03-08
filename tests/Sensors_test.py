@@ -3,6 +3,7 @@ from src.Sensors import Latch, Temperature, GPS
 from datetime import datetime as dt
 
 
+
 class TestLatch(unittest.TestCase):
     def setUp(self):
         self.latch = Latch()

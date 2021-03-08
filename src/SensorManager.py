@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-from Sensors import GPS, Temperature, Latch
+from .Sensors import GPS, Temperature, Latch
 
 
 class SensorManager:
@@ -15,16 +15,6 @@ class SensorManager:
             obj.generate_values()
 
     @property
-    def timestamp(self):
-        return self._timestamp
-
-    @timestamp.setter
-    def timestamp(self, value):
-        if not isinstance(value, dt):
-            raise Exception("Timestamp value passed is not a datetime object")
-        self._timestamp = value
-
-    @property
     def sensor_readings(self):
         self.generate_values()
         temp_dict = {
@@ -34,8 +24,3 @@ class SensorManager:
         temp_dict["timestamp"] = dt.utcnow()
 
         return temp_dict
-
-
-if __name__ == "__main__":
-    x = SensorManager()
-    print(x.sensor_readings)
