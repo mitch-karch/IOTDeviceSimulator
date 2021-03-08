@@ -1,4 +1,4 @@
-from SensorManager import SensorManager
+from .SensorManager import SensorManager
 import uuid
 import re
 import json
@@ -19,7 +19,7 @@ class Device:
 
     @device_name.setter
     def device_name(self, value):
-        if bool(re.search("(\w+\s\w+)", value)):
+        if bool(re.match("^(\w+\s\w+)$", value)):
             self._device_name = value
         else:
             raise Exception("Name must be two words")
