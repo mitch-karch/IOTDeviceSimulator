@@ -4,6 +4,7 @@ import re
 import json
 import random
 import os
+import threading
 from pathlib import Path
 
 
@@ -13,6 +14,7 @@ class Device:
         self.__device_uuid = uuid.uuid4() if not device_uuid else device_uuid
         self.__polling_rate = polling_rate
         self.__sensor_manager = SensorManager()
+        self.__threadOn = False
 
     @property
     def device_name(self):
@@ -75,8 +77,17 @@ class Device:
     def __str__(self):
         return "Device Name: {}, UUID: {}".format(self.device_name, self.device_uuid)
 
+    def run(self):
+        print("Started {} thread".format(self.device_name))
+        self.__threadOn = True
+        self.do_every(self.polling_rate, self.generate_values)
 
-if __name__ == "__main__":
-    x = Device()
-    print(x.generate_payload())
-    print(x.generate_payload_json())
+    def stop(self):
+        self.__threadOn = False
+        print("Stoped {} thread".format(self.device_name))
+
+    def do_every(self, interval, worker_func):
+        if self.__threadOn:
+            threading.Timer(interval, self.do_every, [interval, worker_func]).start()
+
+        worker_func()
