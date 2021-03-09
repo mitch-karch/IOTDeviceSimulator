@@ -5,11 +5,9 @@ import json
 
 
 class Device:
-    def __init__(
-        self, device_name="default name", device_uuid=uuid.uuid4(), polling_rate=5
-    ):
+    def __init__(self, device_name="default name", device_uuid=None, polling_rate=5):
         self.device_name = device_name
-        self.device_uuid = device_uuid
+        self.device_uuid = uuid.uuid4() if not device_uuid else device_uuid
         self.polling_rate = polling_rate
         self.sensor_manager = SensorManager()
 
@@ -41,11 +39,10 @@ class Device:
 
     @polling_rate.setter
     def polling_rate(self, value):
-        if isinstance(value,int):
+        if isinstance(value, int):
             self._polling_rate = value
         else:
             raise Exception("Expecting value to be of type int")
-
 
     def generate_values(self):
         self.sensor_manager.generate_values()
