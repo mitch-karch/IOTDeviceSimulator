@@ -73,7 +73,7 @@ class Device:
         return json.dumps(self.generate_payload(), default=str)
 
     def __str__(self):
-        return "Device Name:{}, UUID: {}".format(self.device_name, self.device_uuid)
+        return "Device Name: {}, UUID: {}".format(self.device_name, self.device_uuid)
 
 
 if __name__ == "__main__":

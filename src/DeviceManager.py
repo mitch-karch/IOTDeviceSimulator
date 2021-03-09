@@ -10,7 +10,7 @@ class DeviceManager:
     
     @device_list.setter
     def device_list(self,value):
-        if value == []:
+        if value == [] and len(device_list) == 0:
             self.__device_list = value
         else:
             raise Exception("Can't modify the Device list this way")
@@ -25,3 +25,6 @@ class DeviceManager:
                 self.__device_list.remove(dev)
         else:
             print("Device with that UUID not found")
+    
+    def __str__(self):
+        return "\n".join(str(device) for device in self.device_list)
