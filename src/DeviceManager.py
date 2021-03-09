@@ -25,6 +25,6 @@ class DeviceManager:
                 self.__device_list.remove(dev)
         else:
             print("Device with that UUID not found")
-
+    
     def __str__(self):
         return "\n".join(str(device) for device in self.device_list)

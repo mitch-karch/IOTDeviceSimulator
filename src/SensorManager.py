@@ -10,7 +10,6 @@ class SensorManager:
         self.Latch = Latch()
 
     def generate_values(self):
-        print("\n",vars(self))
         for name, obj in vars(self).items():
             obj.generate_values()
 

@@ -5,6 +5,7 @@ import json
 import random
 import os
 import threading
+from datetime import datetime as dt
 from pathlib import Path
 
 
@@ -15,6 +16,8 @@ class Device:
         self.__polling_rate = polling_rate
         self.__sensor_manager = SensorManager()
         self.__threadOn = False
+        self.__start_time = dt.utcnow()
+        self.__iterations = 0
 
     @property
     def device_name(self):
@@ -62,8 +65,17 @@ class Device:
     def sensor_manager(self):
         return self.__sensor_manager
 
+    @property
+    def iterations(self):
+        return self.__iterations
+
+    @property
+    def start_time(self):
+        return self.__start_time
+
     def generate_values(self):
         self.sensor_manager.generate_values()
+        self.__iterations += 1
 
     def generate_payload(self):
         temp_dict = self.sensor_manager.sensor_readings
@@ -77,6 +89,7 @@ class Device:
     def __str__(self):
         return "Device Name: {}, UUID: {}".format(self.device_name, self.device_uuid)
 
+    # Threading Things
     def run(self):
         print("Started {} thread".format(self.device_name))
         self.__threadOn = True
@@ -86,6 +99,7 @@ class Device:
         self.__threadOn = False
         print("Stoped {} thread".format(self.device_name))
 
+    # Reference code from semicolonworld
     def do_every(self, interval, worker_func):
         if self.__threadOn:
             threading.Timer(interval, self.do_every, [interval, worker_func]).start()

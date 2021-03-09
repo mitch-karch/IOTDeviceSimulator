@@ -41,7 +41,16 @@ def my_callback(inp):
                 structuredVals[1], structuredVals[2]
             ):
                 device.stop()
-
+    elif structuredVals[0].lower() == "stats":
+        for device in DeviceManager.device_list:
+            if device.device_name == "{} {}".format(
+                structuredVals[1], structuredVals[2]
+            ):
+                print(
+                    "Device Name: {}\nBirthdate: {}\nPayloads Geneated:{}\n".format(
+                        device.device_name, device.start_time, device.iterations
+                    )
+                )
 
 # start the Keyboard thread
 kthread = KeyboardThread(my_callback)
