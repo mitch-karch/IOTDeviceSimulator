@@ -13,6 +13,15 @@ class TestDevice(unittest.TestCase):
         for attrib in ["device_name", "device_uuid", "polling_rate", "sensor_manager"]:
             self.assertTrue(hasattr(self.device, attrib))
 
+    def test_polling_bad_Set(self):
+        with self.assertRaises(Exception):
+            self.device.polling_rate = "25"
+
+    def test_polling_good_Set(self):
+        new_value = 10
+        self.device.polling_rate = new_value
+        self.assertTrue(self.device.polling_rate == new_value)
+
     def test_name_bad_Set(self):
         with self.assertRaises(Exception):
             self.device.device_name = "super cool name"

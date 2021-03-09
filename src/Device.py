@@ -35,6 +35,18 @@ class Device:
         else:
             self._device_uuid = value
 
+    @property
+    def polling_rate(self):
+        return self._polling_rate
+
+    @polling_rate.setter
+    def polling_rate(self, value):
+        if isinstance(value,int):
+            self._polling_rate = value
+        else:
+            raise Exception("Expecting value to be of type int")
+
+
     def generate_values(self):
         self.sensor_manager.generate_values()
 
