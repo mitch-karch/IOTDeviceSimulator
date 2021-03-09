@@ -2,14 +2,17 @@ from .SensorManager import SensorManager
 import uuid
 import re
 import json
+import random
+import os
+from pathlib import Path
 
 
 class Device:
-    def __init__(self, device_name="default name", device_uuid=None, polling_rate=5):
+    def __init__(self, device_name=None, device_uuid=None, polling_rate=5):
         self.device_name = device_name
-        self.device_uuid = uuid.uuid4() if not device_uuid else device_uuid
-        self.polling_rate = polling_rate
-        self.sensor_manager = SensorManager()
+        self.__device_uuid = uuid.uuid4() if not device_uuid else device_uuid
+        self.__polling_rate = polling_rate
+        self.__sensor_manager = SensorManager()
 
     @property
     def device_name(self):
@@ -17,32 +20,45 @@ class Device:
 
     @device_name.setter
     def device_name(self, value):
-        if bool(re.match("^(\w+\s\w+)$", value)):
+        if value is None:
+            current_path = Path(os.path.dirname(os.path.realpath(__file__)))
+            adjectives = current_path / "resources" / "adjectives.txt"
+            nouns = current_path / "resources" / "nouns.txt"
+
+            adjective = random.choice(list(open(adjectives))).rstrip()
+            noun = random.choice(list(open(nouns))).rstrip()
+
+            self._device_name = "{} {}".format(adjective, noun)
+        elif bool(re.match("^(\w+\s\w+)$", value)):
             self._device_name = value
         else:
             raise Exception("Name must be two words")
 
     @property
     def device_uuid(self):
-        return self._device_uuid
+        return self.__device_uuid
 
     @device_uuid.setter
     def device_uuid(self, value):
         if len(str(value)) != 36:
             raise Exception("UUID is expected to be 36 characters")
         else:
-            self._device_uuid = value
+            self.__device_uuid = value
 
     @property
     def polling_rate(self):
-        return self._polling_rate
+        return self.__polling_rate
 
     @polling_rate.setter
     def polling_rate(self, value):
         if isinstance(value, int):
-            self._polling_rate = value
+            self.__polling_rate = value
         else:
             raise Exception("Expecting value to be of type int")
+
+    @property
+    def sensor_manager(self):
+        return self.__sensor_manager
 
     def generate_values(self):
         self.sensor_manager.generate_values()
@@ -55,6 +71,9 @@ class Device:
 
     def generate_payload_json(self):
         return json.dumps(self.generate_payload(), default=str)
+
+    def __str__(self):
+        return "Device Name:{}, UUID: {}".format(self.device_name, self.device_uuid)
 
 
 if __name__ == "__main__":

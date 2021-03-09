@@ -17,9 +17,11 @@ class DeviceManager:
 
     def add_device(self):
         self.__device_list.append(Device())
+        print(self.__device_list[-1])
     
     def remove_device(self,uuid):
         for dev in self.device_list:
             if str(dev.device_uuid) == str(uuid):
                 self.__device_list.remove(dev)
-    
+        else:
+            print("Device with that UUID not found")
