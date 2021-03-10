@@ -1,5 +1,6 @@
 from src.DeviceManager import DeviceManager
 import threading
+import json
 
 DeviceManager = DeviceManager()
 
@@ -11,7 +12,7 @@ class KeyboardThread(threading.Thread):
         self.start()
 
     def run(self):
-        while True:
+        while self.input_cbk != "exit":
             self.input_cbk(input("\n>"))  # waits to get input + Return
 
 
@@ -25,7 +26,15 @@ def my_callback(inp):
         print(DeviceManager)
     elif structuredVals[0].lower() == "read":
         given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
-        print(DeviceManager.device_dict[given_shortname].generate_payload())
+        # Use this functionality to pretty print nested dicts
+        print(
+            json.dumps(
+                DeviceManager.device_dict[given_shortname].generate_payload(),
+                indent=4,
+                default=str,
+                sort_keys=True,
+            )
+        )
     elif structuredVals[0].lower() == "run":
         given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
         DeviceManager.device_dict[given_shortname].run()
@@ -39,6 +48,7 @@ def my_callback(inp):
     elif structuredVals[0].lower() == "stats":
         given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
         print(DeviceManager.device_dict[given_shortname].stats())
+
 
 
 # start the Keyboard thread

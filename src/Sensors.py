@@ -21,12 +21,41 @@ class SensorState(ExtendedEnum):
 
 
 class Sensor:
+    """
+    Parent base-class for common sensor types
+
+    Attributes
+    ----------
+    timestamp : datetime.datetime
+        UTC timestamp of when Sensor was last accessed
+    measured_value : int
+        Stored value of sensor. Usually over-written by child-class
+
+    Methods
+    -------
+    dict_rep():
+        returns a dictionary representation of the sensors attributes
+    """
+
     def __init__(self, measured_val=None):
+        """
+        Constructs all the necessary attributes for the Sensor object
+
+        Paramaters
+        ----------
+            timestamp : datetime.datetime
+                UTC timestamp of when Sensor was last accessed
+            measured_value : int
+                Stored value of sensor.
+        """
         self.timestamp = dt.utcnow()
         self.measured_value = measured_val
 
     @property
     def timestamp(self):
+        """
+        Get the stored timestamp
+        """
         return self._timestamp
 
     @timestamp.setter
@@ -37,6 +66,9 @@ class Sensor:
 
     @property
     def measured_value(self):
+        """
+        Get the stored measured value
+        """
         return self._measured_value
 
     @measured_value.setter
@@ -45,6 +77,13 @@ class Sensor:
         self._measured_value = value
 
     def dict_rep(self):
+        """
+        Returns a dictionary representation of the sensors attributes
+
+        Returns
+        -------
+        dict_rep (dict): Dictionary representation of Sensor Attributes
+        """
         return {"measured_value": self.measured_value, "timestamp": self.timestamp}
 
     def __str__(self):
@@ -52,6 +91,24 @@ class Sensor:
 
 
 class Temperature(Sensor):
+    """
+    Temperature Sensor which emulates a typical thermocouple
+
+    Attributes
+    ----------
+    measured_value : int
+        Stored value of sensor.
+
+    temperature_scale : enum
+        enum value representing which temperature scale is being used.
+
+    Methods
+    -------
+    generate_values():
+        sets class attribute of measured_value to a positive of or negative
+        increment of the previous values
+    """
+
     def __init__(self, measured_value=0.0, temperature_scale=TemperatureScale.CELSIUS):
         Sensor.__init__(self, measured_value)
         self.temperature_scale = temperature_scale
@@ -61,6 +118,22 @@ class Temperature(Sensor):
 
 
 class Latch(Sensor):
+    """
+    Latch Sensor which emulates a opening and closing Latch
+
+    Attributes
+    ----------
+    measured_value : enum
+        Latch state represented by enum.name
+
+    Methods
+    -------
+    generate_values():
+        sets class attribute of measured_value to a positive of or negative
+        increment of the previous values
+    """
+
+
     def __init__(self, sensor_state=SensorState.OFF):
         super().__init__(sensor_state.name)
 
@@ -114,5 +187,3 @@ class GPS(Sensor):
     def generate_values(self):
         self.latitude += random.normalvariate(0, 0.001)
         self.longitude += random.normalvariate(0, 0.001)
-
-
