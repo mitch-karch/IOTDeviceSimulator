@@ -86,6 +86,11 @@ class Device:
     def generate_payload_json(self):
         return json.dumps(self.generate_payload(), default=str)
 
+    def stats(self):
+        return "Device Name: {}\nBirthdate: {}\nPayloads Geneated:{}\n".format(
+            self.device_name, self.start_time, self.iterations
+        )
+
     def __str__(self):
         return "Device Name: {}, UUID: {}".format(self.device_name, self.device_uuid)
 

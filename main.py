@@ -12,7 +12,7 @@ class KeyboardThread(threading.Thread):
 
     def run(self):
         while True:
-            self.input_cbk(input(">"))  # waits to get input + Return
+            self.input_cbk(input("\n>"))  # waits to get input + Return
 
 
 def my_callback(inp):
@@ -24,33 +24,22 @@ def my_callback(inp):
     elif structuredVals[0].lower() == "list":
         print(DeviceManager)
     elif structuredVals[0].lower() == "read":
-        for device in DeviceManager.device_list:
-            if device.device_name == "{} {}".format(
-                structuredVals[1], structuredVals[2]
-            ):
-                print(device.generate_payload())
+        given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
+        print(DeviceManager.device_dict[given_shortname].generate_payload())
     elif structuredVals[0].lower() == "run":
-        for device in DeviceManager.device_list:
-            if device.device_name == "{} {}".format(
-                structuredVals[1], structuredVals[2]
-            ):
-                device.run()
+        given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
+        DeviceManager.device_dict[given_shortname].run()
     elif structuredVals[0].lower() == "stop":
-        for device in DeviceManager.device_list:
-            if device.device_name == "{} {}".format(
-                structuredVals[1], structuredVals[2]
-            ):
-                device.stop()
+        given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
+        DeviceManager.device_dict[given_shortname].stop()
+    elif structuredVals[0].lower() == "delete":
+        DeviceManager.remove_device(
+            "{} {}".format(structuredVals[1], structuredVals[2])
+        )
     elif structuredVals[0].lower() == "stats":
-        for device in DeviceManager.device_list:
-            if device.device_name == "{} {}".format(
-                structuredVals[1], structuredVals[2]
-            ):
-                print(
-                    "Device Name: {}\nBirthdate: {}\nPayloads Geneated:{}\n".format(
-                        device.device_name, device.start_time, device.iterations
-                    )
-                )
+        given_shortname = "{} {}".format(structuredVals[1], structuredVals[2])
+        print(DeviceManager.device_dict[given_shortname].stats())
+
 
 # start the Keyboard thread
 kthread = KeyboardThread(my_callback)
