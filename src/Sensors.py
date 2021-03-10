@@ -60,6 +60,13 @@ class Sensor:
 
     @timestamp.setter
     def timestamp(self, value):
+        """Sets the protected timestamp value
+
+        Raises
+        ------
+        Exception
+            If the given value is not of type datetime
+        """
         if not isinstance(value, dt):
             raise Exception("Timestamp value passed is not a datetime object")
         self._timestamp = value
@@ -73,6 +80,16 @@ class Sensor:
 
     @measured_value.setter
     def measured_value(self, value):
+        """Sets the protected measured value
+
+        Note that this function also updates the timestamp of the instance.
+        This is to keep record of when the last time the value was "read"
+
+        Raises
+        ------
+        Exception
+            If the given value is not of type float
+        """
         self.timestamp = dt.utcnow()
         self._measured_value = value
 
@@ -110,10 +127,25 @@ class Temperature(Sensor):
     """
 
     def __init__(self, measured_value=0.0, temperature_scale=TemperatureScale.CELSIUS):
+        """
+        Paramaters
+        ----------
+            measured_value: float
+                starting value point of sensor
+
+            temperature_scale : enum
+                enum value representing which temperature scale is being used.
+        """
+
         Sensor.__init__(self, measured_value)
         self.temperature_scale = temperature_scale
 
     def generate_values(self):
+        """
+        generate_values():
+            sets class attribute of measured_value to a positive of or negative
+            increment of the previous values
+        """
         self.measured_value += random.normalvariate(0, 2.7)
 
 
@@ -133,34 +165,82 @@ class Latch(Sensor):
         increment of the previous values
     """
 
-
     def __init__(self, sensor_state=SensorState.OFF):
+        """
+        Paramaters
+        ----------
+            sensor_state: enum
+                starting value of latch
+        """
         super().__init__(sensor_state.name)
 
     def open(self):
+        """Simulates openning of a lid"""
         self.measured_value = SensorState.ON.name
 
     def close(self):
+        """Simulates closing of a lid"""
         self.measured_value = SensorState.OFF.name
 
     def generate_values(self):
+        """Randomly generates a value which opens or closes the lid"""
         self.measured_value = random.choices(
             SensorState.list(), cum_weights=(5, 98, 100), k=1
         )[0]
 
 
 class GPS(Sensor):
+    """
+    GPS Sensor which emulates values from a GPS Antenna
+
+    Attributes
+    ----------
+    latitude : float
+        numeric representation of latitude
+
+    longitude : float
+        numeric representation of longitude
+
+    Methods
+    -------
+    generate_values():
+        sets class attribute of longitude and latitude to a positive of or
+        negative increment of the previous values
+    """
+
     def __init__(self, lat=37.874772, longi=-122.258674):
+        """
+        Paramaters
+        ----------
+            lat : float
+                The given value of latitude position
+            longi : float
+                The given value of longitude position
+        """
+
         super().__init__()
         self.latitude = lat
         self.longitude = longi
 
     @property
     def latitude(self):
+        """
+        Get the stored latitude
+        """
         return self._latitude
 
     @latitude.setter
     def latitude(self, value=None):
+        """Sets the protected latiude value
+
+        Note that it sets the measure_value in the parentclass to None so that
+        the timestamp value gets updated.
+
+        Raises
+        ------
+        Exception
+            If the given value is not of type float
+        """
         if not isinstance(value, float):
             raise Exception("Latitude must be a float")
         self._latitude = value
@@ -168,16 +248,30 @@ class GPS(Sensor):
 
     @property
     def longitude(self):
+        """
+        Get the stored longitude
+        """
         return self._longitude
 
     @longitude.setter
     def longitude(self, value=None):
+        """Sets the protected longitude value
+
+        Note that it sets the measure_value in the parentclass to None so that
+        the timestamp value gets updated.
+
+        Raises
+        ------
+        Exception
+            If the given value is not of type float
+        """
         if not isinstance(value, float):
             raise Exception("Longitude must be a float")
         self._longitude = value
         self.measured_value = None
 
     def dict_rep(self):
+        """Returns a dictionary of the sensors stored values"""
         return {
             "latitude": self.latitude,
             "longitude": self.longitude,
@@ -185,5 +279,6 @@ class GPS(Sensor):
         }
 
     def generate_values(self):
+        """Randomly generates a value which opens or closes the lid"""
         self.latitude += random.normalvariate(0, 0.001)
         self.longitude += random.normalvariate(0, 0.001)
