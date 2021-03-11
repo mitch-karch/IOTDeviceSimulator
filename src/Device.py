@@ -23,7 +23,7 @@ class Device:
         integer representation of how fast each sensor should generate new data
     sensor_manager: SensorManager
         object which manages all sensors
-    threadOn: Boolean
+    thread_on: Boolean
         Value which represents if the device's computation thread is started
     start_time: DateTime
         Value which describes the first time that the device was instantiated
@@ -54,7 +54,7 @@ class Device:
             integer representation of how fast each sensor should generate new data
         sensor_manager: SensorManager
             object which manages all sensors
-        threadOn: Boolean
+        thread_on: Boolean
             Value which represents if the device's computation thread is started
         start_time: DateTime
             Value which describes the first time that the device was instantiated
@@ -66,7 +66,7 @@ class Device:
         self.__device_uuid = uuid.uuid4() if not device_uuid else device_uuid
         self.__polling_rate = polling_rate
         self.__sensor_manager = SensorManager()
-        self.__threadOn = False
+        self.__thread_on = False
         self.__start_time = dt.utcnow()
         self.__iterations = 0
 
@@ -189,18 +189,18 @@ class Device:
     # Threading Things
     def run(self):
         """
-        Sets the threadOn value to True so that the generate_values function
+        Sets the thread_on value to True so that the generate_values function
         will begin looping at the class's set polling rate
         """
         print("Started {} thread".format(self.device_name))
-        self.__threadOn = True
+        self.__thread_on = True
         self.do_every(self.polling_rate, self.generate_values)
 
     def stop(self):
         """
-        Sets the threadOn value to False to stop the thread
+        Sets the thread_on value to False to stop the thread
         """
-        self.__threadOn = False
+        self.__thread_on = False
         print("Stoped {} thread".format(self.device_name))
 
     def do_every(self, interval, worker_func):
@@ -210,7 +210,7 @@ class Device:
 
         Reference code from semicolonworld
         """
-        if self.__threadOn:
+        if self.__thread_on:
             threading.Timer(interval, self.do_every, [interval, worker_func]).start()
 
         worker_func()
