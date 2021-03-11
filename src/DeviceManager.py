@@ -37,7 +37,7 @@ class DeviceManager:
     @device_dict.setter
     def device_dict(self, value):
         """Sets the protected device_name value
-        
+
         This exists mostly such that the device dictionary cannot be set
         in any way other than the initialization. This probably is unecessary
         since the dict is already private.
@@ -58,7 +58,6 @@ class DeviceManager:
         Generates a new device and adds it to the dictionary
         """
 
- 
         temp_device = Device()
         self.__device_dict[temp_device.device_name] = temp_device
         print("Added {}".format(temp_device))
@@ -76,6 +75,46 @@ class DeviceManager:
         else:
             print("Device with that Device Name not found")
 
+    def run_device(self, name):
+        """
+        Looks for the device in the device_dict and run it if it is found,
+        prints a warning if it does not find the device.
+        """
+        if name in self.__device_dict:
+            self.__device_dict[name].run()
+        else:
+            print("Device with that Device Name not found")
+
+    def stop_device(self, name):
+        """
+        Looks for the device in the device_dict and stop it if it is found,
+        prints a warning if it does not find the device.
+        """
+        if name in self.__device_dict:
+            self.__device_dict[name].stop()
+        else:
+            print("Device with that Device Name not found")
+
+    def find_stats(self, name):
+        """
+        Looks for the device in the device_dict and display stats it if it is found,
+        prints a warning if it does not find the device.
+        """
+        if name in self.__device_dict:
+            print(self.__device_dict[name].stats())
+        else:
+            print("Device with that Device Name not found")
+
+    def find_payload(self, name):
+        """
+        Looks for the device in the device_dict and generates a payload if it is found,
+        prints a warning if it does not find the device.
+        """
+        if name in self.__device_dict:
+            return self.__device_dict[name].generate_payload()
+        else:
+            print("Device with that Device Name not found")
+
     def __str__(self):
         """
         Creates a short representation of all the devices which the dictionary
@@ -83,7 +122,7 @@ class DeviceManager:
         """
         return (
             "Device Manager\n"
-            + "=" * 10
+            + "=" * 14
             + "\n"
             + "\n".join(str(device) for device in self.__device_dict.values())
         )
