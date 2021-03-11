@@ -62,7 +62,10 @@ class MyPrompt(Cmd):
 
     def do_quit(self, args):
         """Quits the program."""
+        print("--------------------")
         print("Quitting.")
+        print("Removing all Devices")
+        self.DeviceManager.remove_all_devices()
         raise SystemExit
 
 

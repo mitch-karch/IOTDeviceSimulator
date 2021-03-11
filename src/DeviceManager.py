@@ -95,6 +95,21 @@ class DeviceManager:
         else:
             print("Device with that Device Name not found")
 
+    def stop_all_devices(self):
+        """
+        Stop all devices threads in the device dict
+        """
+        for name, iter_device in self.__device_dict.items():
+            iter_device.stop()
+
+    def remove_all_devices(self):
+        """
+        Remove all devices in the device dict
+        """
+        for name in self.__device_dict.copy().keys():
+            self.remove_device(name)
+
+
     def find_stats(self, name):
         """
         Looks for the device in the device_dict and display stats it if it is found,
