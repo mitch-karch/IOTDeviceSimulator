@@ -109,7 +109,6 @@ class DeviceManager:
         for name in self.__device_dict.copy().keys():
             self.remove_device(name)
 
-
     def find_stats(self, name):
         """
         Looks for the device in the device_dict and display stats it if it is found,

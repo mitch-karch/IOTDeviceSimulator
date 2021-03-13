@@ -3,14 +3,12 @@ from src.Sensors import Latch, Temperature, GPS
 from datetime import datetime as dt
 
 
-
 class TestLatch(unittest.TestCase):
     def setUp(self):
         self.latch = Latch()
 
     def test_check_initial(self):
-        self.assertEqual(self.latch.measured_value,
-         "OFF")
+        self.assertEqual(self.latch.measured_value, "OFF")
 
     def test_open_latch(self):
         self.latch.open()

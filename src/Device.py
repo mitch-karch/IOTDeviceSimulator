@@ -80,7 +80,7 @@ class Device:
     @device_name.setter
     def device_name(self, value):
         """Sets the protected device_name value
-        
+
         If the value is None, it generates a value from two source files
         to create an "Adjective Noun" two-word phrase
 
@@ -206,7 +206,7 @@ class Device:
     def do_every(self, interval, worker_func):
         """
         Function which creates a thread which repeats a given worker_func at a
-        given internal 
+        given internal
 
         Reference code from semicolonworld
         """
